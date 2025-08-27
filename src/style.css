@@ -1,0 +1,268 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-size: small;
+  color-scheme: light dark;
+  color: var(--text);
+  background-color: var(--bg-dark);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --bg-dark: hsl(0, 0%, 5%);
+  --bg-light: hsl(0, 0%, 10%);
+  --bg-lighter: hsl(0, 0%, 15%);
+  --bg-lightest: hsl(0, 0%, 20%);
+  --text: #f5e8d8;
+  --text-muted: #c0b6aa;
+  --color-primary: #03dac6;
+  --color-secondary: #bb86fc;
+  --color-secondary-muted: #996dce;
+  --priority-high: #f74545;
+  --priority-medium: #fdbf4d;
+  --priority-low: #4ea1d8;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+span {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+dialog {
+  background-color: var(--bg-light);
+  border-radius: 0.5em;
+  border: 1px solid var(--bg-lighter);
+  padding: 1em;
+  width: 30%;
+  height: 38%;
+  font-size: inherit;
+}
+label {
+  color: var(--text-muted);
+}
+#dueDate,
+#priority {
+  width: 10em;
+  margin-bottom: 5px;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1em;
+  gap: 0.4em;
+}
+.btn {
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 0.3em;
+  background-color: var(--color-secondary);
+  color: var(--bg-dark);
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: var(--color-secondary-muted);
+}
+input,
+textarea {
+  border-color: transparent;
+  border-radius: 0.2em;
+  background-color: var(--bg-lightest);
+  height: 2em;
+  outline: none;
+  color: var(--text);
+}
+.form-row {
+  display: flex;
+  flex-direction: column;
+}
+#description {
+  font-family: inherit;
+  height: 6em;
+  text-align: start;
+  color: var(--text);
+}
+select {
+  background-color: var(--bg-lightest);
+  border: 1px solid var(--bg-dark);
+  border-radius: 0.2em;
+  padding: 0.2em;
+  color: var(--text);
+  outline: none;
+  border-color: transparent; /* nebo vlastní barvu */
+  margin-bottom: 10px;
+}
+
+h1 {
+  color: var(--text-muted);
+  font-size: 1.2em;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.appContainer {
+  display: flex;
+}
+.projectTitle {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+  margin-bottom: 2em;
+}
+.todoFooter {
+  align-items: center;
+  justify-content: right;
+}
+.projectTodoContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+}
+.todoTitle {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.todoDueDate {
+  margin-top: 5px;
+}
+.todoDescription {
+  color: var(--text-muted);
+}
+.todoDueDate,
+.todoPriority {
+  color: var(--text);
+}
+.toDoCard {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--card-border, black); /* fallback black */
+  border-radius: 0.5em;
+  padding: 1em;
+  width: auto;
+  margin: 5px;
+  font-size: small;
+}
+.todoSetting {
+  display: flex;
+  flex-direction: column;
+  margin-left: 3em;
+}
+.projectCard {
+  font-size: 0.9em;
+  padding: 5px;
+  box-sizing: border-box;
+  background-color: var(--bg-lightest);
+  border-radius: 0.5em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+}
+.projectCard:hover {
+  outline: 1px solid var(--color-primary);
+}
+.projectSideBar {
+  background-color: var(--bg-light);
+  border-right: 1px solid var(--bg-lighter);
+  box-sizing: border-box;
+  padding: 1em;
+  width: 300px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.projectFooter {
+  text-align: center;
+}
+.circleBtn {
+  margin-bottom: 10px;
+  width: 100px;
+  height: 32px;
+  font-weight: bold;
+  border-radius: 5em;
+  font-size: inherit;
+  font-family: inherit;
+  border: 2px solid var(--bg-light);
+  cursor: pointer;
+  color: var(--bg-dark);
+  transition: border-color 500ms;
+  /* box-shadow: 0px 2px 4px rgba(240, 240, 240, 0.1); */
+}
+
+.todo {
+  background-color: var(--color-secondary);
+}
+.todo:hover {
+  border-color: var(--color-secondary);
+}
+.project:hover {
+  border-color: var(--color-primary);
+}
+.project {
+  background-color: var(--color-primary);
+}
+.addProjectBtn:hover {
+  border-color: var(--color-primary);
+}
+.addTodo {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.addTodo:hover {
+  border-color: #646cff;
+}
+.addTodo:focus,
+.addTodo:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* základní styl labelu */
+.checkbox {
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* původní input skryjeme */
+.checkbox input {
+  display: none;
+}
+
+/* náš vizuální čtvereček */
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  border-radius: 4px; /* pro kulatý vzhled dej 50% */
+  margin-right: 8px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* efekt při hoveru */
+.checkbox:hover .checkmark {
+  border-color: var(--color-primary);
+}
+
+/* zatržítko po zaškrtnutí */
+.checkbox input:checked + .checkmark::after {
+  content: "✔";
+  position: absolute;
+  top: -3px;
+  left: 2px;
+  font-size: 18px;
+  color: var(--color-primary);
+}
