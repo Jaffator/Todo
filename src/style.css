@@ -11,8 +11,8 @@
   -moz-osx-font-smoothing: grayscale;
   --bg-dark: hsl(0, 0%, 5%);
   --bg-light: hsl(0, 0%, 10%);
-  --bg-lighter: hsl(0, 0%, 15%);
-  --bg-lightest: hsl(0, 0%, 20%);
+  --bg-lighter: hsl(0, 0%, 17%);
+  --bg-lightest: hsl(0, 0%, 22%);
   --text: #f5e8d8;
   --text-muted: #c0b6aa;
   --color-primary: #03dac6;
@@ -32,21 +32,44 @@ span {
   color: var(--text-muted);
   font-size: 0.9em;
 }
+.active-project {
+  outline: 1px solid var(--color-primary);
+}
+.done {
+  opacity: 0.5;
+}
+.cardButtons {
+  display: flex;
+  gap: 5px;
+}
+.dialog-container {
+  height: 97%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 dialog {
   background-color: var(--bg-light);
   border-radius: 0.5em;
   border: 1px solid var(--bg-lighter);
   padding: 1em;
   width: 30%;
-  height: 38%;
   font-size: inherit;
 }
+.dialogToDo {
+  height: 50%;
+}
+
+.dialogProject {
+  height: 25%;
+}
+
 label {
   color: var(--text-muted);
 }
 #dueDate,
 #priority {
-  width: 10em;
+  width: 11em;
   margin-bottom: 5px;
 }
 .dialog-footer {
@@ -55,12 +78,23 @@ label {
   margin-top: 1em;
   gap: 0.4em;
 }
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+.btn-delete {
+  border: none;
+  border-radius: 0.3em;
+  color: var(--bg-lightest);
+  background-color: var(--priority-high);
+  font-size: 17px;
+  cursor: pointer;
+}
 .btn {
   padding: 0.5em 1em;
   border: none;
   border-radius: 0.3em;
-  background-color: var(--color-secondary);
   color: var(--bg-dark);
+  font-weight: bold;
   cursor: pointer;
 }
 .btn:hover {
@@ -109,7 +143,7 @@ h1 {
 .projectTitle {
   text-align: center;
   font-size: 1.5em;
-  margin-bottom: 0.5em;
+  margin-top: 2em;
   margin-bottom: 2em;
 }
 .todoFooter {
@@ -117,6 +151,11 @@ h1 {
   justify-content: right;
 }
 .projectTodoContainer {
+  margin: 1em 1em 1em 0.4em;
+  background-color: var(--bg-light);
+  box-sizing: border-box;
+  border-radius: 2em;
+  height: 98vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -138,40 +177,58 @@ h1 {
 .todoPriority {
   color: var(--text);
 }
+.toDoList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .toDoCard {
   display: flex;
   flex-direction: row;
+  align-items: center;
   border: 1px solid var(--card-border, black); /* fallback black */
+  background-color: var(--bg-lighter);
   border-radius: 0.5em;
   padding: 1em;
-  width: auto;
+  width: 80%;
+  min-width: 300px;
   margin: 5px;
+  font-size: small;
+}
+.todoContent {
+  width: 100%;
+}
+select {
   font-size: small;
 }
 .todoSetting {
   display: flex;
   flex-direction: column;
-  margin-left: 3em;
+  margin: 0 0.1em 0 4em;
 }
 .projectCard {
+  display: flex;
+  align-items: center;
   font-size: 0.9em;
   padding: 5px;
   box-sizing: border-box;
-  background-color: var(--bg-lightest);
+  background-color: var(--bg-lighter);
   border-radius: 0.5em;
   margin-bottom: 0.5em;
+  height: 3em;
   cursor: pointer;
 }
 .projectCard:hover {
   outline: 1px solid var(--color-primary);
 }
 .projectSideBar {
+  margin: 1em 0.4em 1em 1em;
   background-color: var(--bg-light);
-  border-right: 1px solid var(--bg-lighter);
   box-sizing: border-box;
+  border-radius: 2em;
   padding: 1em;
   width: 300px;
-  height: 100vh;
+  height: 98vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -179,10 +236,13 @@ h1 {
 .projectFooter {
   text-align: center;
 }
+.cancel {
+  color: var(--priority-high);
+}
 .circleBtn {
   margin-bottom: 10px;
   width: 100px;
-  height: 32px;
+  height: 40px;
   font-weight: bold;
   border-radius: 5em;
   font-size: inherit;
@@ -193,8 +253,7 @@ h1 {
   transition: border-color 500ms;
   /* box-shadow: 0px 2px 4px rgba(240, 240, 240, 0.1); */
 }
-
-.todo {
+.btntodo {
   background-color: var(--color-secondary);
 }
 .todo:hover {
@@ -203,7 +262,7 @@ h1 {
 .project:hover {
   border-color: var(--color-primary);
 }
-.project {
+.btnproject {
   background-color: var(--color-primary);
 }
 .addProjectBtn:hover {
@@ -241,7 +300,12 @@ h1 {
   display: none;
 }
 
-/* náš vizuální čtvereček */
+.btn-cancel {
+  background-color: var(--priority-high);
+}
+.btn-submit {
+  background-color: var(--color-secondary);
+}
 .checkmark {
   width: 20px;
   height: 20px;
