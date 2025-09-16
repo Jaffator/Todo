@@ -51,7 +51,7 @@ class TodoFormUI {
                     <option value="medium" ${priority === "medium" ? "selected" : ""}>Medium</option>
                     <option value="high" ${priority === "high" ? "selected" : ""}>High</option>
                   </select>
-                  <span>Done!</span>
+                  <span>Done-vole</span>
                   <div class="cardButtons">
                   <label class="checkbox">
                     <input data-index="${id}" type="checkbox" ${done === true ? "checked" : ""}/>
