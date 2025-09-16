@@ -1,4 +1,5 @@
 import "./style.css";
+import "@mdi/font/css/materialdesignicons.css";
 import { TodoItem, formToDo } from "./module_todo";
 import { ProjectItem, formProject, testProject1, testProject2 } from "./module_project";
 import { format, formatDistance, formatRelative, subDays } from "date-fns";
