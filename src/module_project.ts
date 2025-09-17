@@ -23,6 +23,25 @@ class ProjectFormUI {
     const description = this.descriptionInput.value.trim();
     return { name, description };
   }
+  disableProjectBtns() {
+    const projectDelBtn = document.querySelectorAll<HTMLButtonElement>(".projectCard .project-btn.del");
+    const projectEditBtn = document.querySelectorAll<HTMLButtonElement>(".projectCard .project-btn.edit");
+    projectDelBtn.forEach((btn) => {
+      btn.disabled = true;
+    });
+    projectEditBtn.forEach((btn) => {
+      btn.disabled = true;
+    });
+  }
+  projectContent(id: string, name: string) {
+    return `
+    <div class="projectCard" data-id="${id}">${name}
+      <div>
+        <button disabled class="project-btn edit"><span class="mdi mdi-pencil"></span></button>
+        <button disabled class="project-btn del"><span class="mdi mdi-trash-can-outline"></span></button>
+      <div/>
+    </div>`;
+  }
 }
 // ----- project Object -------
 
@@ -43,6 +62,18 @@ class ProjectItem {
   set id(value: string) {
     this._id = value;
   }
+  set descpription(value: string) {
+    this._description = value;
+  }
+  set name(value: string) {
+    this._name = value;
+  }
+  get id() {
+    return this._id;
+  }
+  get name() {
+    return this._name;
+  }
   removeTask(index: number) {
     this._todos.splice(index, 1);
   }
@@ -62,8 +93,4 @@ class ProjectItem {
 }
 
 const formProject = new ProjectFormUI();
-
-const testProject1 = new ProjectItem("Test 1", "Some test project");
-const testProject2 = new ProjectItem("Test 2", "Some test project");
-
-export { ProjectItem, formProject, testProject1, testProject2 };
+export { ProjectItem, formProject };

@@ -35,7 +35,6 @@ class TodoFormUI {
     this.form.reset();
   }
   todoContent(title: string, desc: string, date: string, priority: string, id: string, done: boolean): string {
-    console.log(done);
     return `    <div class="toDoCard ${done === true ? "done" : ""}" style="border-color: var(--priority-${priority})">
                 <div class="todoContent">
                   <div class="todoTitle">${title}</div>

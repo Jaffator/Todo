@@ -1,8 +1,8 @@
 import "./style.css";
 import "@mdi/font/css/materialdesignicons.css";
 import { TodoItem, formToDo } from "./module_todo";
-import { ProjectItem, formProject, testProject1, testProject2 } from "./module_project";
-import { format, formatDistance, formatRelative, subDays } from "date-fns";
+import { ProjectItem, formProject } from "./module_project";
+import { format } from "date-fns";
 
 class ToDoAppUI {
   public projects: ProjectItem[] = [];
@@ -10,29 +10,45 @@ class ToDoAppUI {
   private todoList: HTMLElement;
   public actualProject: string = "";
   private projectCards!: NodeListOf<HTMLElement>;
+  private dialogProject: HTMLDialogElement;
+  private dialogTitle: HTMLHeadingElement;
+  private projectDialogTitle: HTMLInputElement;
+  private projectDialogDescription: HTMLTextAreaElement;
 
   constructor() {
     this.projectList = document.querySelector(".projectList") as HTMLElement;
     this.todoList = document.querySelector(".toDoList") as HTMLElement;
+    this.dialogProject = document.querySelector("#dialog-add-project") as HTMLDialogElement;
+    this.dialogTitle = document.querySelector<HTMLHeadingElement>(".dialogProject .dialog-title")!;
+    this.projectDialogTitle = document.querySelector<HTMLInputElement>(".dialogProject input")!;
+    this.projectDialogDescription = document.querySelector<HTMLTextAreaElement>(".dialogProject #description")!;
   }
   initUI() {
     const dialogTodo = document.querySelector("#dialog-add-todo") as HTMLDialogElement;
-    const dialogProject = document.querySelector("#dialog-add-project") as HTMLDialogElement;
     const addProjectBtn = document.querySelector(".circleBtn.btnproject") as HTMLButtonElement;
     const addToDoBtn = document.querySelector(".circleBtn.btntodo") as HTMLButtonElement;
     const projectCancel = document.querySelector("button[data-dialog='project'].btn-cancel") as HTMLFormElement;
     const todoCancel = document.querySelector("button[data-dialog='todo'].btn-cancel") as HTMLFormElement;
-    // const projectCards = document.querySelectorAll(".projectCard");
 
-    addProjectBtn.addEventListener("click", () => dialogProject.showModal());
+    addProjectBtn.addEventListener("click", () => {
+      this.dialogTitle.textContent = "New project";
+      this.dialogProject.showModal();
+    });
     addToDoBtn.addEventListener("click", () => dialogTodo.showModal());
-    projectCancel.addEventListener("click", () => dialogProject.close());
+    projectCancel.addEventListener("click", () => this.dialogProject.close());
     todoCancel.addEventListener("click", () => dialogTodo.close());
+
     // dialog project
-    dialogProject.addEventListener("submit", (event) => {
-      event?.preventDefault();
-      dialogProject.close();
-      this.addProject();
+    this.dialogProject.addEventListener("submit", (event) => {
+      if (this.dialogTitle.textContent == "New project") {
+        event?.preventDefault();
+        this.dialogProject.close();
+        this.addProject();
+      } else {
+        event?.preventDefault();
+        this.dialogProject.close();
+        this.editProject();
+      }
     });
     // dialog todo
     dialogTodo.addEventListener("submit", (event) => {
@@ -44,21 +60,53 @@ class ToDoAppUI {
     this.clickOnProject(this.projectCards[0]);
   }
   clickOnProject(projectCard: Element) {
-    // const projectCards = document.querySelectorAll(".projectCard");
     const projectId = (projectCard as HTMLElement).dataset.id;
     this.actualProject = projectId!;
-    console.log(`Project ID: ${projectId}`);
     this.projectCards.forEach((card) => card.classList.remove("active-project"));
     projectCard.classList.add("active-project");
+    formProject.disableProjectBtns();
+    const buttons = projectCard.querySelectorAll<HTMLButtonElement>("button");
+    buttons.forEach((btn) => {
+      btn.disabled = false;
+    });
+    const actualProjectTitle = document.querySelector<HTMLDivElement>(".todoListContainer .projectTitle")!;
+    actualProjectTitle.textContent = this.getActualProject()?.name ?? "";
     this.renderAllTodos();
-    console.log(this.projects);
   }
+
   setProjectEvents() {
-    // const projectCards = document.querySelectorAll(".projectCard");
+    const projectDelBtn = document.querySelectorAll(".projectCard .project-btn.del");
+    const projectEditBtn = document.querySelectorAll(".projectCard .project-btn.edit");
+
+    // click on project event
     this.projectCards.forEach((projectCard) => {
       projectCard.addEventListener("click", () => this.clickOnProject(projectCard));
     });
+
+    // edit project
+    projectEditBtn.forEach((edit) => {
+      edit.addEventListener("click", () => {
+        this.dialogTitle.textContent = "Edit project";
+        this.dialogProject.showModal();
+        const descr = this.getActualProject()?.getProjectData().description!;
+        const name = this.getActualProject()?.getProjectData().name!;
+        this.projectDialogDescription.value = descr;
+        this.projectDialogTitle.value = name;
+      });
+    });
+
+    // delete project
+    projectDelBtn.forEach((del) => {
+      del.addEventListener("click", (event) => {
+        const cardId = ((event.currentTarget as HTMLElement).closest(".projectCard") as HTMLElement)!.dataset.id;
+        const idx = this.projects.findIndex((pr) => pr.getProjectData().id == cardId);
+        this.projects.splice(idx, 1);
+        this.renderProjects();
+        this.save();
+      });
+    });
   }
+
   setTodoEvents() {
     const selections = document.querySelectorAll(".toDoCard select");
     const doneBtns = document.querySelectorAll(".toDoCard input");
@@ -69,7 +117,6 @@ class ToDoAppUI {
         if (target) {
           const value = target.value;
           const id = target.dataset.index;
-          console.log(value, id);
           this.projects.forEach((project) => {
             const projecToChange = project.getProjectData().todos.find((todo) => todo.getToDoItem().id == id);
             if (projecToChange) {
@@ -108,16 +155,28 @@ class ToDoAppUI {
     });
     this.save();
   }
+
   getActualProject() {
     const actual = this.projects.find((p) => p.getProjectData().id == this.actualProject);
     return actual;
   }
+
   addTodo() {
     const formData = formToDo.getFormData();
     const todo = new TodoItem(formData.title, formData.description, formData.dueDate, formData.priority);
     const actual = this.projects.find((p) => p.getProjectData().id == this.actualProject);
     actual?.addTask(todo);
     this.renderTodo(todo);
+    this.save();
+  }
+  editProject() {
+    const formData = formProject.getFormData();
+    const actualProject = this.getActualProject();
+    actualProject!.descpription = formData.description;
+    actualProject!.name = formData.name;
+    this.renderProjects();
+    const idx = this.projects.findIndex((prj) => prj.getProjectData().id == this.getActualProject()!.id);
+    this.clickOnProject(this.projectCards[idx]);
     this.save();
   }
   addProject() {
@@ -128,6 +187,7 @@ class ToDoAppUI {
     this.setProjectEvents();
     this.save();
   }
+
   renderAllTodos() {
     const actual = this.projects.find((p) => p.getProjectData().id == this.actualProject);
     this.todoList.innerHTML = ``;
@@ -135,6 +195,7 @@ class ToDoAppUI {
       this.renderTodo(todo);
     });
   }
+
   renderTodo(todo: TodoItem) {
     this.todoList.innerHTML += formToDo.todoContent(
       todo.getToDoItem().title,
@@ -146,13 +207,14 @@ class ToDoAppUI {
     );
     this.setTodoEvents();
   }
+
   renderProjects() {
     this.projectList.innerHTML = ``;
     this.todoList.innerHTML = ``;
     this.projects.forEach((project) => {
-      this.projectList.innerHTML += `<div class="projectCard" data-id="${project.getProjectData().id}">${
-        project.getProjectData().name
-      }</div>`;
+      const id = project.getProjectData().id;
+      const name = project.getProjectData().name;
+      this.projectList.innerHTML += formProject.projectContent(id, name);
     });
     this.projectCards = document.querySelectorAll<HTMLElement>(".projectCard");
     this.setProjectEvents();
@@ -161,13 +223,13 @@ class ToDoAppUI {
   save() {
     localStorage.setItem("projects", JSON.stringify(this.projects));
   }
+
   load() {
     const data = localStorage.getItem("projects");
     if (!data) {
       this.projects = [];
       return;
     }
-    // console.log(data);
     const storedProjects = JSON.parse(data);
     this.projects = storedProjects.map((project: any) => {
       const proj = new ProjectItem(project._name, project._description);
@@ -186,8 +248,4 @@ class ToDoAppUI {
 }
 
 const app = new ToDoAppUI();
-// app.projects.push(testProject1, testProject2);
-// app.renderProjects();
-// app.renderAllTodos();
 app.initUI();
-// app.load();
